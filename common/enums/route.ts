@@ -22,6 +22,7 @@ type ROUTE_KEY =
   | 'USER_FOLLOWERS'
   | 'USER_FOLLOWEES'
   | 'ARTICLE_DETAIL'
+  | 'ARTICLE_DETAIL_SHORT'
   | 'ARTICLE_DETAIL_LEGACY'
   | 'ME_INVITATIONS'
   | 'ME_WALLET'
@@ -124,6 +125,11 @@ export const ROUTES: Array<{
     key: 'ARTICLE_DETAIL',
     href: '/ArticleDetail',
     as: '/@:userName/*-:mediaHash'
+  },
+  {
+    key: 'ARTICLE_DETAIL_SHORT',
+    href: '/ArticleDetail',
+    as: '/p/:globalId'
   },
   {
     key: 'ARTICLE_DETAIL_LEGACY',

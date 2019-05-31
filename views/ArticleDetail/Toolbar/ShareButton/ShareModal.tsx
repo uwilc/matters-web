@@ -20,10 +20,16 @@ import WeChat from './WeChat'
 import Weibo from './Weibo'
 import WhatsApp from './WhatsApp'
 
-const ShareModal = () => {
-  return (
-    <ModalInstance modalId="shareModal" layout="small">
-      {(props: ModalInstanceProps) => (
+const ShareModal = () => (
+  <ModalInstance modalId="shareModal" layout="small">
+    {(props: ModalInstanceProps) => {
+      const shortUrl = [
+        window.location.origin,
+        'p',
+        props.detail.globalId
+      ].join('/')
+
+      return (
         <Modal.Content spacing="none" layout="full-width">
           <>
             <div className="socials-container">
@@ -50,7 +56,7 @@ const ShareModal = () => {
                     viewBox={ICON_SHARE_LINK.viewBox}
                     size="small"
                     onClick={() => {
-                      dom.copyToClipboard(decodeURI(window.location.href))
+                      dom.copyToClipboard(shortUrl)
                       window.dispatchEvent(
                         new CustomEvent(ADD_TOAST, {
                           detail: {
@@ -73,7 +79,7 @@ const ShareModal = () => {
               </TextIcon>
               <input
                 type="text"
-                value={decodeURI(window.location.href)}
+                value={shortUrl}
                 readOnly
                 onClick={event => event.currentTarget.select()}
               />
@@ -82,9 +88,9 @@ const ShareModal = () => {
             <style jsx>{styles}</style>
           </>
         </Modal.Content>
-      )}
-    </ModalInstance>
-  )
-}
+      )
+    }}
+  </ModalInstance>
+)
 
 export default ShareModal

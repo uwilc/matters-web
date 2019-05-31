@@ -8,6 +8,7 @@ import { OPEN_MODAL } from '~/common/enums'
 const emptyModalId = ''
 
 export const ModalContext = React.createContext({
+  detail: {},
   prevModalId: emptyModalId,
   openedModalId: emptyModalId,
   open: (modalId: string) => {
@@ -39,6 +40,7 @@ export const ModalProvider = ({
 }) => {
   const [prevModalId, setPrevModalId] = useState(emptyModalId)
   const [openedModalId, setOpenedModalId] = useState(defaultModalId)
+  const [detail, setDetail] = useState({})
 
   const open = (id: string) => {
     setPrevModalId(openedModalId)
@@ -51,15 +53,17 @@ export const ModalProvider = ({
   }
 
   // listen for open modal event
-  useEventListener(OPEN_MODAL, (detail: CustomEvent['detail']) => {
-    if (detail.id) {
-      open(detail.id)
+  useEventListener(OPEN_MODAL, (eventDetail: CustomEvent['detail']) => {
+    if (eventDetail.id) {
+      open(eventDetail.id)
+      setDetail(eventDetail)
     }
   })
 
   return (
     <ModalContext.Provider
       value={{
+        detail,
         prevModalId,
         openedModalId,
         open: (modalId: string) => open(modalId),
@@ -85,10 +89,12 @@ export const ModalProvider = ({
  */
 export const ModalSwitch = ({
   children,
-  modalId
+  modalId,
+  detail
 }: {
   children: any
   modalId: string
+  detail?: CustomEvent['detail']
 }) => (
   <ModalContext.Consumer>
     {({ open }) => children(() => open(modalId))}
@@ -132,7 +138,7 @@ export const ModalInstance = ({
 
   return (
     <ModalContext.Consumer>
-      {({ close, prevModalId, openedModalId }) => {
+      {({ close, prevModalId, openedModalId, detail }) => {
         if (children && node && openedModalId === modalId) {
           return ReactDOM.createPortal(
             <Modal.Container
@@ -141,6 +147,7 @@ export const ModalInstance = ({
               defaultCloseable={defaultCloseable}
               prevModalId={prevModalId}
               layout={layout}
+              detail={detail}
             >
               {(props: any) => children(props)}
             </Modal.Container>,

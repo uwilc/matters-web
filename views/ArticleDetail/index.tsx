@@ -85,6 +85,9 @@ const ArticleDetail: React.FC<WithRouterProps> = ({ router }) => {
   const [fixedToolbar, setFixedToolbar] = useState(true)
   const mediaHash = getQuery({ router, key: 'mediaHash' })
   const uuid = getQuery({ router, key: 'post' })
+  const globalId = getQuery({ router, key: 'globalId' })
+
+  console.log({ globalId })
 
   if (!mediaHash && !uuid) {
     return null

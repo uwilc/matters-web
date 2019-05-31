@@ -14,6 +14,7 @@ import styles from './styles.css'
 export interface ContainerProps {
   children: any
   close: () => void
+  detail?: CustomEvent['detail']
   defaultCloseable?: boolean
   prevModalId?: string
   title?: string
@@ -26,6 +27,7 @@ const Container: FC<ContainerProps> = ({
   defaultCloseable = true,
   prevModalId,
   title,
+  detail,
   layout = 'default'
 }) => {
   const overlayClass = classNames(
@@ -90,7 +92,8 @@ const Container: FC<ContainerProps> = ({
                 interpret,
                 closeable,
                 setCloseable,
-                setModalClass
+                setModalClass,
+                detail
               })}
             </div>
           </div>
