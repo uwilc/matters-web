@@ -1,6 +1,9 @@
 import { useQuery } from '@apollo/react-hooks'
 import { NetworkStatus } from 'apollo-client'
 import gql from 'graphql-tag'
+// import clamp from 'lodash/clamp'
+import { animated, useSpring } from 'react-spring'
+import { useDrag } from 'react-use-gesture'
 
 import {
   ArticleDigestFeed,
@@ -206,6 +209,20 @@ const MainFeed = ({ feedSortType: sortBy }: { feedSortType: SortBy }) => {
 }
 
 const HomeFeed = () => {
+  const [{ transform }, setDragGoal] = useSpring(() => ({
+    transform: 'translateX(0px)',
+  }))
+
+  const bind = useDrag(
+    ({ down, movement: [mx], direction: [xDir, yDir], distance, cancel }) => {
+      if (!down) {
+        setDragGoal({ transform: `translateX(0px)` })
+      } else {
+        setDragGoal({ transform: `translateX(${mx}px)` })
+      }
+    }
+  )
+
   const { data, client } = useQuery<ClientPreference>(CLIENT_PREFERENCE, {
     variables: { id: 'local' },
   })
@@ -227,8 +244,15 @@ const HomeFeed = () => {
         <SortBy sortBy={feedSortType as SortBy} setSortBy={setSortBy} />
         <ViewMode />
       </section>
-
-      <MainFeed feedSortType={feedSortType as SortBy} />
+      <animated.div
+        {...bind()}
+        style={{
+          transform,
+          touchAction: 'none',
+        }}
+      >
+        <MainFeed feedSortType={feedSortType as SortBy} />
+      </animated.div>
 
       <style jsx>{styles}</style>
     </>

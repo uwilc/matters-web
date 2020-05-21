@@ -58,6 +58,7 @@ export type AnalyticEvent =
   | 'load-more'
   | 'share'
   | 'purchase'
+  | 'pull-to-refresh'
 
 export type EventProp =
   | ClickButtonProp
@@ -126,6 +127,7 @@ type ArticleFeedType =
   | 'topics'
   | 'user-article'
   | 'wallet'
+
 interface UserFeedProp {
   type: UserFeedType
   contentType: 'user'
