@@ -1,7 +1,0 @@
-.set-amount-no-liker-id {
-  @mixin flex-center-all;
-
-  margin: var(--spacing-xx-loose) var(--spacing-xxx-loose);
-  color: var(--color-grey-dark);
-  text-align: center;
-}
